@@ -35,12 +35,13 @@ public class DalService {
     public DalCampaign createCampaign(String name, LocalDate startDate, List<DalProduct> products, double bid) {
         try {
             DalCampaign savedCampaign = initializeCampaign(name, startDate, bid);
-
             List<DalPromotedProduct> promotedProducts = getDalPromotedProducts(savedCampaign, products);
             List<DalPromotedProduct> savedPromotedProducts = dalPromotedProductRepository.saveAll(promotedProducts);
             var promotedProductSet = new HashSet<>(savedPromotedProducts);
             savedCampaign.setPromotedProducts(promotedProductSet);
             dalCampaignRepository.save(savedCampaign);
+            log.info("Successfully persisted campaign '{}' with ID: {} and associated promoted products.",
+                    savedCampaign.getName(), savedCampaign.getId());
             return savedCampaign;
 
         } catch (Exception e) {
@@ -67,7 +68,12 @@ public class DalService {
                 log.error("No campaigns available");
                 throw new IllegalStateException("No active campaigns with bids found.");
             }
-            return highestBid.getContent().get(0);
+            return highestBid.getContent().stream()
+                    .findFirst()
+                    .orElseThrow(() -> {
+                        log.error("No campaigns available");
+                        return new IllegalStateException("No active campaigns with bids found.");
+                    });
         } catch (Exception e) {
             log.error("Error fetching promoted product: {}", e.getMessage());
             throw new RuntimeException("Error fetching promoted product", e);
@@ -83,6 +89,7 @@ public class DalService {
             log.error("Invalid product IDs: " + invalidIds);
             throw new IllegalArgumentException("Invalid product IDs: " + invalidIds);
         }
+        log.info("Successfully retrieved products with IDs: {}", productIds);
         return products;
     }
 

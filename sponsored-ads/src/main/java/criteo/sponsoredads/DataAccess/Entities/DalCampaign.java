@@ -18,10 +18,10 @@ public class DalCampaign {
     private int id;
 
     @Column(name = "start_date", columnDefinition = "DATE", nullable = false)
-    private LocalDate startDate;
+    private LocalDate startDate; // for simplicity - taking the date only (without precise time)
 
     @Column(name = "end_date", columnDefinition = "DATE", nullable = false)
-    private LocalDate endDate;
+    private LocalDate endDate; // added for simple query on fetching active campaigns
 
     @Column(name = "bid")
     private double bid;

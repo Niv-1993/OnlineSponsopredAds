@@ -26,7 +26,7 @@ public class DataLoader {
 
     @PostConstruct
     private void populateDatabase() {
-        String[] categories = {"Electronics", "Fashion", "Books", "HomeNKitchen", "Toys", "HealthNBeauty"};
+        String[] categories = {"electronics", "fashion", "books", "kitchen", "toys", "health"};
 
         String[][] products = {
                 {"Smartphone", "12345678", "599.99"},
@@ -40,7 +40,7 @@ public class DataLoader {
         var dalCategories = new ArrayList<DalCategory>();
         for (String category : categories) {
             DalCategory dalCategory = new DalCategory();
-            dalCategory.setName(category);
+            dalCategory.setName(category.toLowerCase());
             var saved = dalCategoryRepository.save(dalCategory);
             dalCategories.add(saved);
         }
