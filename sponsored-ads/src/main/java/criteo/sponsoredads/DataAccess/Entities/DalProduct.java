@@ -20,7 +20,7 @@ public class DalProduct {
     @Column(name = "price")
     private double price;
 
-    @Column(name = "serial_number", nullable = false)
+    @Column(name = "serial_number", nullable = false, unique = true)
     private String serialNumber;
 
     @ManyToOne(fetch = FetchType.EAGER)

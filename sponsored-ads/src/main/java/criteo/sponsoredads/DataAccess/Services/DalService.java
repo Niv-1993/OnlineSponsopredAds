@@ -76,7 +76,6 @@ public class DalService {
 
     public List<DalProduct> getProductsById(List<Integer> productIds) {
         List<DalProduct> products = dalProductsRepository.findByIdIn(productIds);
-
         if (products.size() != productIds.size()) {
             List<Integer> retrievedProductIds = products.stream().map(DalProduct::getId).toList();
             List<Integer> invalidIds = productIds.stream()

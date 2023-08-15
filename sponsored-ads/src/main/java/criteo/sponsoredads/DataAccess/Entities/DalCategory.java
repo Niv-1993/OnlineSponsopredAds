@@ -19,9 +19,9 @@ public class DalCategory {
     @Column(name = "category_name", nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", orphanRemoval = true)
     private Set<DalProduct> product;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", orphanRemoval = true)
     private Set<DalPromotedProduct> promotedProducts;
 }

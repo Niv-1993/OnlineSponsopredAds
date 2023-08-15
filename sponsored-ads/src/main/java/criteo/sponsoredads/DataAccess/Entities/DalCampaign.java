@@ -17,7 +17,7 @@ public class DalCampaign {
     @Column(name = "id", nullable = false)
     private int id;
 
-    @Column(name = "start_date" ,columnDefinition = "DATE", nullable = false)
+    @Column(name = "start_date", columnDefinition = "DATE", nullable = false)
     private LocalDate startDate;
 
     @Column(name = "end_date", columnDefinition = "DATE", nullable = false)
@@ -29,7 +29,7 @@ public class DalCampaign {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "campaign")
+    @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<DalPromotedProduct> promotedProducts;
 
 }
