@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.security.InvalidParameterException;
 import java.time.LocalDateTime;
 
 @ControllerAdvice
@@ -37,4 +38,13 @@ public class AllExceptionsHandler extends ResponseEntityExceptionHandler {
                 LocalDateTime.now(), request.getDescription(false));
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(InvalidParameterException.class)
+    public final ResponseEntity<Object> handleAllExceptions(InvalidParameterException ex, WebRequest request) {
+        log.error(ex.getMessage());
+        ErrorResponseDetails error = new ErrorResponseDetails(ex.getMessage(),
+                LocalDateTime.now(), request.getDescription(false));
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
 }
