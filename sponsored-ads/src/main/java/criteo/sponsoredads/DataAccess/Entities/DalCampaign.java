@@ -17,13 +17,13 @@ public class DalCampaign {
     @Column(name = "id", nullable = false)
     private int id;
 
-    @Column(name = "start_date" ,columnDefinition = "DATE")
+    @Column(name = "start_date" ,columnDefinition = "DATE", nullable = false)
     private LocalDate startDate;
 
     @Column(name = "bid")
     private double bid;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "campaign")

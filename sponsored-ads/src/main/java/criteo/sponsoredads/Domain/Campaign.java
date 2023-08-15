@@ -17,5 +17,14 @@ public class Campaign {
     private double bid;
     private List<Integer> promotedProducts;
 
-
+    @Override
+    public String toString() {
+        return "Campaign{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", startDate=" + startDate +
+                ", bid=" + bid +
+                ", promotedProducts=" + promotedProducts +
+                '}';
+    }
 }

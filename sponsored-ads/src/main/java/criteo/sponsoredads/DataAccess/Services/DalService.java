@@ -35,10 +35,10 @@ public class DalService {
             DalCampaign savedCampaign = initializeCampaign(name,startDate, bid);
 
             List<DalPromotedProduct> promotedProducts = getDalPromotedProducts(savedCampaign, products);
-            List<DalPromotedProduct> savedPromotedProducts = dalPromotedProductRepository.saveAllAndFlush(promotedProducts);
+            List<DalPromotedProduct> savedPromotedProducts = dalPromotedProductRepository.saveAll(promotedProducts);
             var promotedProductSet = new HashSet<>(savedPromotedProducts);
             savedCampaign.setPromotedProducts(promotedProductSet);
-
+            dalCampaignRepository.save(savedCampaign);
             return savedCampaign;
 
         } catch (Exception e) {
@@ -47,16 +47,16 @@ public class DalService {
         }
     }
 
-    public List<DalProduct> validateProductIds(List<Integer> productIds) {
+    public List<DalProduct> getProductsById(List<Integer> productIds) {
         List<DalProduct> products = dalProductsRepository.findByIdIn(productIds);
 
         if (products.size() != productIds.size()) {
             List<Integer> retrievedProductIds = products.stream().map(DalProduct::getId).toList();
             List<Integer> invalidIds = productIds.stream()
                     .filter(id -> !retrievedProductIds.contains(id)).toList();
+            log.error("Invalid product IDs: " + invalidIds);
             throw new IllegalArgumentException("Invalid product IDs: " + invalidIds);
         }
-
         return products;
     }
 

@@ -16,7 +16,7 @@ public class DalCategory {
     @Column(name = "id", nullable = false)
     private int id;
 
-    @Column(name = "category_name")
+    @Column(name = "category_name", nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "category")

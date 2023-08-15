@@ -14,13 +14,13 @@ public class DalProduct {
     @Column(name = "id", nullable = false)
     private int id;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
     @Column(name = "price")
     private double price;
 
-    @Column(name = "serial_number")
+    @Column(name = "serial_number", nullable = false)
     private String serialNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
