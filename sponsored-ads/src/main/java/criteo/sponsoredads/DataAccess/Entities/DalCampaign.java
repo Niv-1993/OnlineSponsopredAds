@@ -20,6 +20,9 @@ public class DalCampaign {
     @Column(name = "start_date" ,columnDefinition = "DATE", nullable = false)
     private LocalDate startDate;
 
+    @Column(name = "end_date", columnDefinition = "DATE", nullable = false)
+    private LocalDate endDate;
+
     @Column(name = "bid")
     private double bid;
 

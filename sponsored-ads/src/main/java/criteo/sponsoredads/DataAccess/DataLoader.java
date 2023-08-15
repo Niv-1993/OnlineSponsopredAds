@@ -26,7 +26,7 @@ public class DataLoader {
 
     @PostConstruct
     private void populateDatabase() {
-        String[] categories = {"Electronics", "Fashion", "Books", "Home & Kitchen", "Toys", "Health & Beauty"};
+        String[] categories = {"Electronics", "Fashion", "Books", "HomeNKitchen", "Toys", "HealthNBeauty"};
 
         String[][] products = {
                 {"Smartphone", "12345678", "599.99"},

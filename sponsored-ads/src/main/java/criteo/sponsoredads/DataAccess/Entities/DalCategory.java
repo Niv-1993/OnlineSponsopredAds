@@ -23,5 +23,5 @@ public class DalCategory {
     private Set<DalProduct> product;
 
     @OneToMany(mappedBy = "category")
-    private Set<DalPromotedProduct> promotedProducts;  // TODO: maybe not needed
+    private Set<DalPromotedProduct> promotedProducts;
 }

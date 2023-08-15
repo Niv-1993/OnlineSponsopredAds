@@ -5,6 +5,8 @@ import criteo.sponsoredads.DataAccess.Entities.*;
 import criteo.sponsoredads.DataAccess.Repositories.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +34,7 @@ public class DalService {
     @Transactional
     public DalCampaign createCampaign(String name, LocalDate startDate, List<DalProduct> products, double bid) {
         try {
-            DalCampaign savedCampaign = initializeCampaign(name,startDate, bid);
+            DalCampaign savedCampaign = initializeCampaign(name, startDate, bid);
 
             List<DalPromotedProduct> promotedProducts = getDalPromotedProducts(savedCampaign, products);
             List<DalPromotedProduct> savedPromotedProducts = dalPromotedProductRepository.saveAll(promotedProducts);
@@ -44,6 +46,31 @@ public class DalService {
         } catch (Exception e) {
             log.error("Error creating campaign: {}", e.getMessage());
             throw new RuntimeException("Error creating campaign", e);
+        }
+    }
+
+    @Transactional
+    public DalPromotedProduct getHighestBidProductByCategory(String category) {
+        try {
+            Page<DalPromotedProduct> candidateProduct =
+                    dalPromotedProductRepository.findTopByCategoryNameAndHighestBid(category,
+                            PageRequest.of(0, 1));
+            if (!candidateProduct.isEmpty()) {
+                log.info(String.format("Found promoted product under category %s", category));
+                return candidateProduct.getContent().get(0);
+            }
+            log.info(String.format("Did not find any promoted product under category: %s. " +
+                    "Checking for highest product with highest bid in campaign", category));
+            Page<DalPromotedProduct> highestBid =
+                    dalPromotedProductRepository.findTopByHighestBid(PageRequest.of(0, 1));
+            if (highestBid.isEmpty()) {
+                log.error("No campaigns available");
+                throw new IllegalStateException("No active campaigns with bids found.");
+            }
+            return highestBid.getContent().get(0);
+        } catch (Exception e) {
+            log.error("Error fetching promoted product: {}", e.getMessage());
+            throw new RuntimeException("Error fetching promoted product", e);
         }
     }
 
@@ -64,6 +91,7 @@ public class DalService {
         DalCampaign dalCampaign = new DalCampaign();
         dalCampaign.setName(name);
         dalCampaign.setStartDate(startDate);
+        dalCampaign.setEndDate(startDate.plusDays(10));
         dalCampaign.setBid(bid);
         return dalCampaignRepository.saveAndFlush(dalCampaign);
     }
@@ -82,7 +110,7 @@ public class DalService {
         promotedProduct.setId(id);
         promotedProduct.setCampaign(campaign);
         promotedProduct.setProduct(dalProduct);
-        promotedProduct.setCategory(dalProduct.getCategory()); //TODO: maybe not needed
+        promotedProduct.setCategory(dalProduct.getCategory());
 
         return promotedProduct;
     }

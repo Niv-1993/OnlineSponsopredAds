@@ -1,6 +1,7 @@
 package criteo.sponsoredads.Domain;
 
 import criteo.sponsoredads.DataAccess.Entities.DalProduct;
+import criteo.sponsoredads.DataAccess.Entities.DalPromotedProduct;
 import criteo.sponsoredads.DataAccess.Services.DalService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,23 @@ public class CampaignManager {
         log.info(String.format("Successfully created new campaign. %s", campaign));
         return campaign;
     }
+
+    public Product serveAd(String category) {
+        if (category == null) {
+            log.error("Category name is null or empty");
+            throw new InvalidParameterException("Campaign name cannot be null or empty");
+        }
+        DalPromotedProduct dalPromotedProduct = dalService.getHighestBidProductByCategory(category);
+        var promotedProduct = new Product(dalPromotedProduct.getId().getProductId(),
+                dalPromotedProduct.getProduct().getTitle(), dalPromotedProduct.getProduct().getPrice(),
+                dalPromotedProduct.getProduct().getSerialNumber(),
+                dalPromotedProduct.getCategory().getName(),
+                dalPromotedProduct.getCampaign().getName());
+        log.info(String.format("Successfully got promoted product with highest bid on active campaign. %s",
+                promotedProduct));
+        return promotedProduct;
+    }
+
 
     private void validateInput(String name, LocalDate startDate, List<Integer> productIds, double bid) {
         log.info("Validating input of new campaign creation");

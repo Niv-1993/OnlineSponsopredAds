@@ -13,14 +13,14 @@ public class DalPromotedProduct {
     @EmbeddedId
     private PromotedProductKey id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("productId")
     private DalProduct product;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("campaignId")
     private DalCampaign campaign;
 
-    @ManyToOne(fetch = FetchType.LAZY) // TODO: maybe not needed
+    @ManyToOne(fetch = FetchType.EAGER)
     private DalCategory category;
 }

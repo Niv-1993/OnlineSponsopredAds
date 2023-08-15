@@ -23,7 +23,7 @@ public class DalProduct {
     @Column(name = "serial_number", nullable = false)
     private String serialNumber;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private DalCategory category;
 
