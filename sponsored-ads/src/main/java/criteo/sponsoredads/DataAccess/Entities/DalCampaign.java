@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -24,5 +25,8 @@ public class DalCampaign {
 
     @Column(name = "name")
     private String name;
+
+    @OneToMany(mappedBy = "campaign")
+    private Set<DalPromotedProduct> promotedProducts;
 
 }
